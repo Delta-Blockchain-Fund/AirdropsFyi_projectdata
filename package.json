@@ -1,0 +1,25 @@
+{
+  "name": "delta-fund-airdrops",
+  "version": "1.0.0",
+  "description": "",
+  "main": "updateAirdrops.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockful-io/delta-fund-airdrops.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blockful-io/delta-fund-airdrops/issues"
+  },
+  "homepage": "https://github.com/blockful-io/delta-fund-airdrops#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.2"
+  }
+}

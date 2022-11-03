@@ -1,0 +1,17 @@
+name: Update airdrops
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: node:18
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: touch .env
+      - run: echo "BACKEND_URL=${{ secrets.BACKEND_URL }}" >> .env
+      - run: echo "ADMIN_KEY=${{ secrets.ADMIN_KEY }}" >> .env
+      - run: node updateAirdrops.js
