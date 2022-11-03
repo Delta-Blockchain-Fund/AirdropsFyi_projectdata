@@ -1,8 +1,8 @@
-const fs = require("fs");
-const axios = require("axios");
-const core = require("@actions/core");
+const fs = require('fs');
+const axios = require('axios');
+const core = require('@actions/core');
 
-require("dotenv").config();
+require('dotenv').config();
 const BACKEND_URL = process.env.BACKEND_URL;
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
@@ -11,16 +11,16 @@ function checkEnv(variable, name) {
     core.setFailed(`Missing ${name} environment variable`);
   }
 }
-checkEnv(BACKEND_URL, "BACKEND_URL");
-checkEnv(ADMIN_KEY, "ADMIN_KEY");
+checkEnv(BACKEND_URL, 'BACKEND_URL');
+checkEnv(ADMIN_KEY, 'ADMIN_KEY');
 
 async function main() {
   // read all airdrops files from airdrops folder
   const airdrops = [];
-  fs.readdirSync("./airdrops").forEach((file) => {
+  fs.readdirSync('./airdrops').forEach((file) => {
     const content = require(`./airdrops/${file}`);
     const airdrop = {
-      name: file.replace(".json", ""),
+      name: file.replace('.json', ''),
       description: content.description,
       logoUrl: content.logoUrl,
       claimUrl: content.claimUrl,
@@ -40,8 +40,8 @@ async function main() {
       },
       {
         headers: {
-          "x-admin-key": ADMIN_KEY,
-          "Content-Type": "application/json",
+          'x-admin-key': ADMIN_KEY,
+          'Content-Type': 'application/json',
         },
       }
     )
@@ -60,7 +60,7 @@ async function main() {
     const response = await axios
       .post(`${BACKEND_URL}add-new-token`, airdrop, {
         headers: {
-          "x-admin-key": ADMIN_KEY,
+          'x-admin-key': ADMIN_KEY,
         },
       })
       .catch((err) => {
@@ -71,5 +71,6 @@ async function main() {
   }
 }
 main().catch((err) => {
+  console.log(err);
   core.setFailed(err.message);
 });
