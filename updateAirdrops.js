@@ -19,6 +19,7 @@ async function main() {
   const airdrops = [];
   fs.readdirSync('./airdrops').forEach((file) => {
     const content = require(`./airdrops/${file}`);
+    if (file == `.DS_Store`) return;
     const airdrop = {
       name: file.replace('.json', ''),
       description: content.description,
