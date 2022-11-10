@@ -1,0 +1,14 @@
+name: Verify airdrops
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: node:18
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: node verifyAirdrops.js
