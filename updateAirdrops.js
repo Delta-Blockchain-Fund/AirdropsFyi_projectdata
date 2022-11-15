@@ -6,6 +6,12 @@ require('dotenv').config();
 const BACKEND_URL = process.env.BACKEND_URL;
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
+axios.interceptors.request.use((request) => {
+  request.maxContentLength = Infinity;
+  request.maxBodyLength = Infinity;
+  return request;
+});
+
 function checkEnv(variable, name) {
   if (!variable) {
     core.setFailed(`Missing ${name} environment variable`);
@@ -33,23 +39,32 @@ async function main() {
   });
 
   // check which airdrops are already saved in the backend
-  console.log(`${BACKEND_URL}check-new-tokens`);
-  const response = await axios
-    .post(
-      `${BACKEND_URL}/check-new-tokens`,
-      {
-        tokensNames: airdrops.map((airdrop) => airdrop.name),
-      },
-      {
-        headers: {
-          'x-admin-key': ADMIN_KEY,
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    .catch((err) => {
-      core.setFailed(err.message);
-    });
+  console.log(`${BACKEND_URL}/check-new-tokens`);
+  const response = await axios({
+    method: 'post',
+    url: `${BACKEND_URL}/check-new-tokens`,
+    data: { tokensNames: airdrops.map((airdrop) => airdrop.name) },
+    headers: { 'x-admin-key': ADMIN_KEY, 'Content-Type': 'application/json' },
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
+  }).catch((err) => {
+    core.setFailed(err.message);
+  });
+  // .post(
+  //   `${BACKEND_URL}/check-new-tokens`,
+  //   {
+  //     tokensNames: airdrops.map((airdrop) => airdrop.name),
+  //   },
+  //   {
+  //     headers: {
+  //       'x-admin-key': ADMIN_KEY,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   }
+  // )
+  // .catch((err) => {
+  //   core.setFailed(err.message);
+  // });
 
   const unsavedAirdrops = response.data.newTokensNames;
   console.log(`Found ${unsavedAirdrops.length} new airdrops`);
